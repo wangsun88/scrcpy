@@ -49,13 +49,14 @@ static void test_serialize_text_event(void) {
 static void test_serialize_long_text_event(void) {
     struct control_event event;
     event.type = CONTROL_EVENT_TYPE_TEXT;
-    char text[TEXT_MAX_LENGTH];
+    char text[TEXT_MAX_LENGTH + 1];
     memset(text, 'a', sizeof(text));
+    text[TEXT_MAX_LENGTH] = '\0';
     event.text_event.text = text;
 
     unsigned char buf[SERIALIZED_EVENT_MAX_SIZE];
     int size = control_event_serialize(&event, buf);
-    assert(size == 3 + sizeof(text));
+    assert(size == 3 + TEXT_MAX_LENGTH);
 
     unsigned char expected[3 + TEXT_MAX_LENGTH];
     expected[0] = 0x01; // CONTROL_EVENT_TYPE_KEYCODE
@@ -87,13 +88,13 @@ static void test_serialize_mouse_event(void) {
 
     unsigned char buf[SERIALIZED_EVENT_MAX_SIZE];
     int size = control_event_serialize(&event, buf);
-    assert(size == 14);
+    assert(size == 18);
 
     const unsigned char expected[] = {
         0x02, // CONTROL_EVENT_TYPE_MOUSE
         0x00, // AKEY_EVENT_ACTION_DOWN
         0x00, 0x00, 0x00, 0x01, // AMOTION_EVENT_BUTTON_PRIMARY
-        0x01, 0x04, 0x04, 0x02, // 260 1026
+        0x00, 0x00, 0x01, 0x04, 0x00, 0x00, 0x04, 0x02, // 260 1026
         0x04, 0x38, 0x07, 0x80, // 1080 1920
     };
     assert(!memcmp(buf, expected, sizeof(expected)));
@@ -120,11 +121,11 @@ static void test_serialize_scroll_event(void) {
 
     unsigned char buf[SERIALIZED_EVENT_MAX_SIZE];
     int size = control_event_serialize(&event, buf);
-    assert(size == 17);
+    assert(size == 21);
 
     const unsigned char expected[] = {
         0x03, // CONTROL_EVENT_TYPE_SCROLL
-        0x01, 0x04, 0x04, 0x02, // 260 1026
+        0x00, 0x00, 0x01, 0x04, 0x00, 0x00, 0x04, 0x02, // 260 1026
         0x04, 0x38, 0x07, 0x80, // 1080 1920
         0x00, 0x00, 0x00, 0x01, // 1
         0xFF, 0xFF, 0xFF, 0xFF, // -1

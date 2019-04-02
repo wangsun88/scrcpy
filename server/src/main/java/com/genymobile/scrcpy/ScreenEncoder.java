@@ -3,7 +3,6 @@ package com.genymobile.scrcpy;
 import com.genymobile.scrcpy.wrappers.SurfaceControl;
 
 import android.graphics.Rect;
-import android.media.MediaMuxer;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;
@@ -87,7 +86,6 @@ public class ScreenEncoder implements Device.RotationListener {
         boolean eof = false;
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
 
-
         while (!consumeRotationChange() && !eof) {
             int outputBufferId = codec.dequeueOutputBuffer(bufferInfo, -1);
             eof = (bufferInfo.flags & MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0;
@@ -151,7 +149,7 @@ public class ScreenEncoder implements Device.RotationListener {
     }
 
     private static IBinder createDisplay() {
-        return SurfaceControl.createDisplay("scrcpy", false);
+        return SurfaceControl.createDisplay("scrcpy", true);
     }
 
     private static void configure(MediaCodec codec, MediaFormat format) {

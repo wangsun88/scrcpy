@@ -1,4 +1,4 @@
-# scrcpy (v1.5)
+# scrcpy (v1.8)
 
 This application provides display and control of Android devices connected on
 USB (or [over TCP/IP][article-tcpip]). It does not require any _root_ access.
@@ -29,12 +29,10 @@ control it using keyboard and mouse.
 On Linux, you typically need to [build the app manually][BUILD]. Don't worry,
 it's not that hard.
 
-For Arch Linux, two [AUR] packages have been created by users:
-
- - [`scrcpy`](https://aur.archlinux.org/packages/scrcpy/)
- - [`scrcpy-prebuiltserver`](https://aur.archlinux.org/packages/scrcpy-prebuiltserver/)
+For Arch Linux, an [AUR] package is available: [`scrcpy`][aur-link].
 
 [AUR]: https://wiki.archlinux.org/index.php/Arch_User_Repository
+[aur-link]: https://aur.archlinux.org/packages/scrcpy/
 
 For Gentoo, an [Ebuild] is available: [`scrcpy/`][ebuild-link].
 
@@ -47,13 +45,13 @@ For Gentoo, an [Ebuild] is available: [`scrcpy/`][ebuild-link].
 For Windows, for simplicity, prebuilt archives with all the dependencies
 (including `adb`) are available:
 
- - [`scrcpy-win32-v1.5.zip`][direct-win32]  
-   _(SHA-256: 46ae0d4c1c6bd049ec4a30080d2ad91a32b31d3f758afdca2c3a915ecabf02c1)_
- - [`scrcpy-win64-v1.5.zip`][direct-win64]  
-   _(SHA-256: 89daa07325129617cf943a84bc4e304ee5e57118416fe265b9b5d4a1bf87c501)_
+ - [`scrcpy-win32-v1.8.zip`][direct-win32]  
+   _(SHA-256: c0c29ed1c66deaa73bdadacd09e598aafb3a117929cf7a314cce1cc45e34de53)_
+ - [`scrcpy-win64-v1.8.zip`][direct-win64]  
+   _(SHA-256: 9cc980d07bd8f036ae4e91d0bc6fc3281d7fa8f9752d4913b643c0fb72a19fb7)_
 
-[direct-win32]: https://github.com/Genymobile/scrcpy/releases/download/v1.5-fixversion/scrcpy-win32-v1.5.zip
-[direct-win64]: https://github.com/Genymobile/scrcpy/releases/download/v1.5-fixversion/scrcpy-win64-v1.5.zip
+[direct-win32]: https://github.com/Genymobile/scrcpy/releases/download/v1.8/scrcpy-win32-v1.8.zip
+[direct-win64]: https://github.com/Genymobile/scrcpy/releases/download/v1.8/scrcpy-win64-v1.8.zip
 
 You can also [build the app manually][BUILD].
 
@@ -162,7 +160,16 @@ It is possible to record the screen while mirroring:
 
 ```bash
 scrcpy --record file.mp4
-scrcpy -r file.mp4
+scrcpy -r file.mkv
+```
+
+To disable mirroring while recording:
+
+```bash
+scrcpy --no-display --record file.mp4
+scrcpy -Nr file.mkv
+# interrupt recording with Ctrl+C
+# Ctrl+C does not terminate properly on Windows, so disconnect the device
 ```
 
 "Skipped frames" are recorded, even if they are not displayed in real time (for
@@ -194,6 +201,16 @@ scrcpy -f  # short version
 ```
 
 Fullscreen can then be toggled dynamically with `Ctrl`+`f`.
+
+
+### Always on top
+
+The window of app can always be above others by:
+
+```bash
+scrcpy --always-on-top
+scrcpy -T  # short version
+```
 
 
 ### Show touches
@@ -229,6 +246,17 @@ _scrcpy_ window.
 There is no visual feedback, a log is printed to the console.
 
 
+### Read-only
+
+To disable controls (everything which can interact with the device: input keys,
+mouse events, drag&drop files):
+
+```bash
+scrcpy --no-control
+scrcpy -n
+```
+
+
 ### Forward audio
 
 Audio is not forwarded by _scrcpy_.
@@ -257,6 +285,8 @@ you are interested, see [issue 14].
  | click on `VOLUME_DOWN`                 | `Ctrl`+`↓` _(down)_ (`Cmd`+`↓` on MacOS) |
  | click on `POWER`                       | `Ctrl`+`p`                    |
  | turn screen on                         | _Right-click²_                |
+ | expand notification panel              | `Ctrl`+`n`                    |
+ | collapse notification panel            | `Ctrl`+`Shift`+`n`            |
  | paste computer clipboard to device     | `Ctrl`+`v`                    |
  | enable/disable FPS counter (on stdout) | `Ctrl`+`i`                    |
 
